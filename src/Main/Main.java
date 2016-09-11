@@ -12,6 +12,7 @@ public class Main {
         System.out.println("args = [" + threadsCount + "]");
     }
 
+
     private static class setUpFromCommandLine {
         void parseCommands(String[] args) {
             for (int i = 0; i < args.length; i += 2) {
