@@ -1,15 +1,18 @@
 package Main;
-import io.netty.buffer.ByteBuf;
+import Server.Server;
 
 public class Main {
     private static int threadsCount = Runtime.getRuntime().availableProcessors();
-    private static int port = 80;
+    private static int port = 8080;
     private static String rootDir;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         final setUpFromCommandLine settings = new setUpFromCommandLine();
         settings.parseCommands(args);
-        System.out.println("args = [" + threadsCount + "]");
+        final Server server = new Server();
+        server.run(port);
+        System.out.println(String.format("Server with %d threads started on http://localhost:%d ",
+                threadsCount, port));
     }
 
 

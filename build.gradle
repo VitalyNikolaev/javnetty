@@ -8,13 +8,17 @@ version = '1.0'
 repositories {
     mavenCentral()
 }
-mainClassName = 'Main'
-
-jar {
-    manifest {
-        attributes 'Implementation-Title': 'Gradle Quickstart',
-                'Implementation-Version': version
+buildscript {
+    dependencies {
+        classpath fileTree(dir: '../../build/libs', include: '*.jar', excludes: ['*javadoc.jar', '*sources.jar'])
     }
+}
+mainClassName = "Main.Main"
+jar {
+
+    manifest.attributes provider: 'gradle'
+    baseName = 'javnetty'
+    version = '1.0'
 }
 
 dependencies {
