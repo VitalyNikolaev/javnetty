@@ -8,12 +8,7 @@ version = '1.0'
 repositories {
     mavenCentral()
 }
-buildscript {
-    dependencies {
-        classpath fileTree(dir: '../../build/libs', include: '*.jar', excludes: ['*javadoc.jar', '*sources.jar'])
-    }
-}
-mainClassName = "Main.Main"
+
 jar {
 
     manifest.attributes provider: 'gradle'
@@ -24,10 +19,6 @@ jar {
 dependencies {
     compile group: 'io.netty', name: 'netty-all', version: '4.1.5.Final'
 
-}
-
-sourceSets {
-    main.java.srcDirs += 'src/'
 }
 
 task wrapper(type: Wrapper) {

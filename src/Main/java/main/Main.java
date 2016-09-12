@@ -1,4 +1,4 @@
-package Main;
+package main;
 import Server.Server;
 
 public class Main {
@@ -10,9 +10,10 @@ public class Main {
         final setUpFromCommandLine settings = new setUpFromCommandLine();
         settings.parseCommands(args);
         final Server server = new Server();
-        server.run(port);
         System.out.println(String.format("Server with %d threads started on http://localhost:%d ",
                 threadsCount, port));
+        server.run(port);
+
     }
 
 
