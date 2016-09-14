@@ -31,7 +31,6 @@ public class NettyServerHandler {
                     .childOption(ChannelOption.SO_RCVBUF, BUF_OPTION)
                     .childOption(ChannelOption.SO_REUSEADDR, true);
 
-
             ChannelFuture f = b.bind(port).sync();
             f.channel().closeFuture().sync();
         } finally {
