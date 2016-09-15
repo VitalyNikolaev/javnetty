@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class StringFromBytes extends StringDecoder {
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        List<Object> out = new ArrayList<Object>();
+        List<Object> out = new ArrayList<>();
         decode(ctx, (ByteBuf) msg, out);
         String query = (String)out.get(0);
         super.channelRead(ctx, query);
