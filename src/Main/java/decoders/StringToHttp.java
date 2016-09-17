@@ -10,8 +10,10 @@ import java.util.List;
  */
 public class StringToHttp extends MessageToMessageDecoder<String> {
     @Override
-    protected void decode(ChannelHandlerContext ctx, String string, List<Object> out) throws Exception {
-        HTTP request = new HTTP(string);
-//        ctx.channel().write(request);
+    protected void decode(ChannelHandlerContext ctx, String msg, List<Object> out) throws Exception {
+        HTTP request = new HTTP();
+        request.parseRequest(msg);
+        out.add(request);
+        System.out.println("out = [" + out + "]");
     }
 }

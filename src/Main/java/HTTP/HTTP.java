@@ -5,12 +5,14 @@ package HTTP;
  * Created by nikolaev on 11.09.16.
  */
 public class HTTP  {
-    private  String stringToParse;
+    public String serverName = "JavNetty";
 
-    public HTTP (String str) {
-        this.stringToParse = str;
+    public void parseRequest(String str) {
+        Request req = new Request(str);
     }
+    public void makeResponse() {
 
+    }
 
 
 }

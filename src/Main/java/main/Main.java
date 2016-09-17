@@ -12,8 +12,7 @@ public class Main {
     public static void main(String[] args) throws Exception {
 
         parseCommands(args);
-        System.out.println(String.format("Server with %d threads started on http://localhost:%d ",
-                threadsCount, port));
+        System.out.println(String.format("Server with %d threads started on http://localhost:%d ", threadsCount, port));
         NettyServerHandler server = new NettyServerHandler();
         server.run(threadsCount, port);
     }
