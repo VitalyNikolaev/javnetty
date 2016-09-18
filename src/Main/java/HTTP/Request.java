@@ -1,13 +1,6 @@
 package HTTP;
 
-import com.sun.istack.internal.Nullable;
-
-import java.io.File;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.HashMap;
-import java.util.Objects;
-import java.util.regex.Pattern;
 
 /**
  * Created by nikolaev on 16.09.16.
@@ -33,7 +26,9 @@ public class Request {
             reqParams.put("Method", method);
             reqParams.put("Path", path);
         }
-
+    }
+    public String getMethod() {
+        return reqParams.get("Method");
     }
 
     public String getPath () {

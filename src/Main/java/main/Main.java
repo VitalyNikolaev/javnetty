@@ -1,13 +1,12 @@
 package main;
-import Server.NettyServerHandler;
 
-import static java.lang.System.exit;
+import Server.NettyServerHandler;
 
 
 public class Main {
     private static int threadsCount = Runtime.getRuntime().availableProcessors();
     private static int port = 8080;
-    public static String rootDir;
+    public static String rootDir = System.getProperty("user.dir");
     public static String index = "index.html";
 
     public static void main(String[] args) throws Exception {

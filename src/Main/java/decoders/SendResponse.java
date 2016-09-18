@@ -1,22 +1,23 @@
 package decoders;
 
 import HTTP.Request;
+import HTTP.ResponseHeaders;
 import HTTP.TemplateResponse;
 import io.netty.buffer.Unpooled;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelFutureListener;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.channel.*;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-
-import HTTP.ResponseHeaders;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import static HTTP.ResponseHeaders.CONTENT_LENGTH;
-import static main.Main.rootDir;
+import static HTTP.ResponseHeaders.CONTENT_TYPE;
 import static main.Main.index;
+import static main.Main.rootDir;
 
 /**
  * Created by nikolaev on 17.09.16.
@@ -38,7 +39,7 @@ public class SendResponse extends SimpleChannelInboundHandler<Request> {
         }
 
         File file = new File(rootDir + path);
-        if (file.isHidden() || !file.exists()) {
+        if (!file.exists()) {
             sendError(ctx, 404);
             return;
         }
@@ -61,9 +62,29 @@ public class SendResponse extends SimpleChannelInboundHandler<Request> {
 
     private void writeFileResponse(ChannelHandlerContext ctx, File file, Request request) throws IOException {
         RandomAccessFile randomAccessFile = null;
-        ResponseHeaders httpHeader = new ResponseHeaders(404);
+        try {
+            randomAccessFile = new RandomAccessFile(file, "r");
+        } catch (FileNotFoundException ignore) {
+            sendError(ctx, 404);
+            return;
+        }
+
+        long fileLength = randomAccessFile.length();
+
+        ResponseHeaders response = new ResponseHeaders(200);
+        response.headers.put(CONTENT_LENGTH, String.valueOf(fileLength));
+
+        Path filePath = Paths.get(file.getPath());
+        String contentType =  Files.probeContentType(filePath);
+        response.headers.put(CONTENT_TYPE, contentType);
+
         ChannelFuture future;
-        future = ctx.writeAndFlush(httpHeader);
+        if (request.getMethod().equals("HEAD")) {
+            future = ctx.writeAndFlush(response);
+        } else {
+            ctx.write(response);
+            future = ctx.writeAndFlush(new DefaultFileRegion(randomAccessFile.getChannel(), 0, fileLength));
+        }
         future.addListener(ChannelFutureListener.CLOSE);
     }
     private static void sendError(ChannelHandlerContext ctx, int error) {
