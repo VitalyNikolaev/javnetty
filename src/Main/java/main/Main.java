@@ -7,7 +7,8 @@ import static java.lang.System.exit;
 public class Main {
     private static int threadsCount = Runtime.getRuntime().availableProcessors();
     private static int port = 8080;
-    private static String rootDir;
+    public static String rootDir;
+    public static String index = "index.html";
 
     public static void main(String[] args) throws Exception {
 

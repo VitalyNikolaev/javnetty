@@ -1,14 +1,13 @@
 package decoders;
 
-import HTTP.Response;
+import HTTP.ResponseHeaders;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
 
-public class HeadersEncoder extends MessageToByteEncoder<Response> {
+public class HeadersEncoder extends MessageToByteEncoder<ResponseHeaders> {
     @Override
-    protected void encode(ChannelHandlerContext ctx, Response msg, ByteBuf out) throws Exception {
-        System.out.println("ctx = [" + ctx + "], msg = [" + msg + "], out = [" + out + "]");
+    protected void encode(ChannelHandlerContext ctx, ResponseHeaders msg, ByteBuf out) throws Exception {
         out.writeBytes(msg.toString().getBytes());
     }
 }
