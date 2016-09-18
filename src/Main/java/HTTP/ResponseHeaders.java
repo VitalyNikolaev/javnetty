@@ -1,5 +1,7 @@
 package HTTP;
 
+import com.sun.istack.internal.NotNull;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -8,8 +10,8 @@ import java.util.Map;
  * Created by nikolaev on 17.09.16.
  */
 public class ResponseHeaders {
-    public static final String HTTP_VERSION = "1.1";
-    public String serverName = "JavNetty";
+    private static final String HTTP_VERSION = "1.1";
+    private String serverName = "JavNetty";
 
     private int statusCode;
     public Map<String, String> headers = new HashMap<>();
@@ -37,7 +39,9 @@ public class ResponseHeaders {
         headers.put(SERVER, serverName);
         headers.put(CONNECTION, "close");
     }
-    public String getHeaders() {
+
+    @NotNull
+    private String getHeaders() {
         final String mainHeader = String.format("HTTP/%s %d %s",
                 HTTP_VERSION, statusCode, statusDescriptions.get(statusCode));
 

@@ -1,8 +1,9 @@
 package decoders;
 
+import HTTP.Request;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageDecoder;
-import HTTP.Request;
+
 import java.util.List;
 
 /**
@@ -12,11 +13,6 @@ public class StringToHttp extends MessageToMessageDecoder<String> {
     @Override
     protected void decode(ChannelHandlerContext ctx, String msg, List<Object> out) throws Exception {
         Request request = new Request(msg);
-//        try {
-//            request = Request.fromString(msg);
-//        } catch (Exception ignored) {
-//            request = new Request(false);
-//        }
         out.add(request);
     }
 }

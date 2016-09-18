@@ -6,13 +6,11 @@ import HTTP.TemplateResponse;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
 
+import javax.activation.MimetypesFileTypeMap;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import static HTTP.ResponseHeaders.CONTENT_LENGTH;
 import static HTTP.ResponseHeaders.CONTENT_TYPE;
@@ -74,8 +72,9 @@ public class SendResponse extends SimpleChannelInboundHandler<Request> {
         ResponseHeaders response = new ResponseHeaders(200);
         response.headers.put(CONTENT_LENGTH, String.valueOf(fileLength));
 
-        Path filePath = Paths.get(file.getPath());
-        String contentType =  Files.probeContentType(filePath);
+        MimetypesFileTypeMap mimeTypesMap = new MimetypesFileTypeMap();
+        String contentType = mimeTypesMap.getContentType(file.getPath());
+
         response.headers.put(CONTENT_TYPE, contentType);
 
         ChannelFuture future;

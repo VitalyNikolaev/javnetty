@@ -13,9 +13,7 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
  */
 public class NettyServerHandler {
     private static final int BACKLOG_OPTION = 1024;
-
     public void run(int threads, int port) throws Exception {
-
         EventLoopGroup bossGroup = new NioEventLoopGroup(1);
         EventLoopGroup workerGroup = new NioEventLoopGroup(threads);
         try {

@@ -10,7 +10,7 @@ public class Main {
     public static String index = "index.html";
 
     public static void main(String[] args) throws Exception {
-
+        System.out.println("args = [" + rootDir + "]");
         parseCommands(args);
         System.out.println(String.format("Server with %d threads started on http://localhost:%d ", threadsCount, port));
         NettyServerHandler server = new NettyServerHandler();
@@ -30,10 +30,6 @@ public class Main {
                     break;
             }
         }
-//            if (rootDir == null) {
-//                System.err.println("ERROR: Root Directory is not defined");
-//                exit(1);
-//            }
-        }
     }
+}
 
