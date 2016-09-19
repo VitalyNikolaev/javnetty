@@ -21,7 +21,7 @@ task fatJar(type: Jar) {
                 'Implementation-Version': version,
                 'Main-Class': 'main.Main'
     }
-    baseName = project.name + '-all'
+    baseName = 'httpd'
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
     with jar
 }
