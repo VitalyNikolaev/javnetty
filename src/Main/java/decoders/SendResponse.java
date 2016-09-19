@@ -1,12 +1,13 @@
 package decoders;
 
+import HTTP.ContentType;
 import HTTP.Request;
 import HTTP.ResponseHeaders;
 import HTTP.TemplateResponse;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
+import org.apache.commons.io.FilenameUtils;
 
-import javax.activation.MimetypesFileTypeMap;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -14,8 +15,9 @@ import java.io.RandomAccessFile;
 
 import static HTTP.ResponseHeaders.CONTENT_LENGTH;
 import static HTTP.ResponseHeaders.CONTENT_TYPE;
-import static main.Main.index;
-import static main.Main.rootDir;
+import static Server.Config.getIndex;
+import static Server.Config.getRootDir;
+
 
 /**
  * Created by nikolaev on 17.09.16.
@@ -36,22 +38,18 @@ public class SendResponse extends SimpleChannelInboundHandler<Request> {
             return;
         }
 
-        File file = new File(rootDir + path);
+        File file = new File(getRootDir() + path);
         if (!file.exists()) {
             sendError(ctx, 404);
             return;
         }
 
         if (file.isDirectory()) {
-            File indexFile = new File(file.getPath() + "/" + index);
+            File indexFile = new File(file.getPath() + "/" + getIndex());
             if (indexFile.exists()) {
                 file = indexFile;
             } else {
-                final String template = TemplateResponse.generatePage(200, "Server running, but no index.html");
-                ResponseHeaders response = new ResponseHeaders(200);
-                response.headers.put(CONTENT_LENGTH, String.valueOf(template.length()));
-                ctx.write(template);
-                ctx.writeAndFlush(Unpooled.wrappedBuffer(template.getBytes())).addListener(ChannelFutureListener.CLOSE);
+                sendError(ctx, 403);
                 return;
             }
         }
@@ -59,7 +57,7 @@ public class SendResponse extends SimpleChannelInboundHandler<Request> {
     }
 
     private void writeFileResponse(ChannelHandlerContext ctx, File file, Request request) throws IOException {
-        RandomAccessFile randomAccessFile = null;
+        RandomAccessFile randomAccessFile;
         try {
             randomAccessFile = new RandomAccessFile(file, "r");
         } catch (FileNotFoundException ignore) {
@@ -71,11 +69,8 @@ public class SendResponse extends SimpleChannelInboundHandler<Request> {
 
         ResponseHeaders response = new ResponseHeaders(200);
         response.headers.put(CONTENT_LENGTH, String.valueOf(fileLength));
-
-        MimetypesFileTypeMap mimeTypesMap = new MimetypesFileTypeMap();
-        String contentType = mimeTypesMap.getContentType(file.getPath());
-
-        response.headers.put(CONTENT_TYPE, contentType);
+        String extension = FilenameUtils.getExtension(file.getPath());
+        response.headers.put(CONTENT_TYPE, ContentType.getContentType(extension));
 
         ChannelFuture future;
         if (request.getMethod().equals("HEAD")) {
